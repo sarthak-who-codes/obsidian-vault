@@ -92,7 +92,7 @@ Though you wouldn't typically think about a module—a collection of state and p
 
 Values are data. They're how the program maintains state. Values come in two forms in JS: **primitive** and **object**.
 
-Basically same as: [[Fundamentals]]
+Basically same as: [[2. Fundamentals]]
 
 ### Primitive vs Non-primitive data types
 
