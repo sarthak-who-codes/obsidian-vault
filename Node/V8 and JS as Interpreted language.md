@@ -16,11 +16,11 @@ That's why we need **Event Loop**.
 
 ## That Loop
 
-- A loop with phases
-- Single Tread
-- Asynchronous non-blocking I/O
-- Each phase has queue of callbacks
-- terminates when there is no call back left or nothing to do
+- A loop with phases.
+- Single Tread.
+- Asynchronous non-blocking I/O.
+- Each phase has queue of callbacks.
+- terminates when there is no call back left or nothing to do.
 
 ---
 ## Main Module
@@ -49,11 +49,10 @@ So, suppose the loop takes 3 secs to run, then `setTimeout` should run first rig
 
 Well, that's not the case as timers are not executed in the initial phase.
 
-
 ### Modules load before main module
 
 - Modules are resolved first
-- Before running the mail modules
+- Before running the main modules
 - Code of these modules run first before main module.
 - `import` statement are asynchronous in nature. So, that's a different case.
 - Modules can load other modules
@@ -101,11 +100,10 @@ So how can do timers? A code that runs after a certain amount of time is passed.
 3. Use hardware timer. Highest accuracy among.
 
 So now lets talk about timers
-- First phase of event loop
 - Runs after initial phase
 - Done by libuv
-- Timer callbacks are scheduled, sorted by duration
-- Not accurate: Can be slowed down by other phases.
+- Timer callbacks are **scheduled** and **sorted** by duration
+- **Not always accurate:** Can be slowed down by other phases.
 
 ```js
 const timerCallback = (a) => {
@@ -303,14 +301,14 @@ readCallback: Hello World!
 In this case, the node execution process is:
 
 1. **Main module execution:** 
-    - First main module runs. 
-    - `fs.readFile` opens the file but does not read it. 
+    - First main module runs.
+    - `fs.readFile` opens the file but does not read it.
     - `fs.readFile` delegates the file reading to the **I/O thread pool (libuv)**( poll phase ) and moves on.
     - `setImmediate` is scheduled( check phase ).
     - Event loop begins after this.
 2. **Timer phase(1st):** 
     - No timer are scheduled, moves to next phase.
-3. **Pending callback phase(1st):**  
+3. **Pending callback phase(1st):** 
     - This phase handles callbacks from I/O operations that were deferred in the previous event loop iteration, but nothing exists yet, so it moves on.
 4. **Idle, prepare phase(1st):**
     - Node internal process happens.
