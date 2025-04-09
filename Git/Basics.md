@@ -67,9 +67,26 @@ Every commit has a unique commit hash
 ```bash
 git log
 
-git log --oneline # Less verbose
+git log -n <number> # Shows `n` number of latest commit
 
-git --no-page log -n <number-of-logs> # --no-pager prints the output in terminal
+git --no-pager # --no-pager prints the output in terminal
+
+### OPTIONS
+
+--graph # Good for visualizing branches
+
+--no-decorate, --decorate[=short|full|auto|no]
+# Adds reference names (like branch or tag names) to commit logs.
+#	- `short`: Shows ref names without prefixes (`refs/heads/`, etc.).
+#	- `full`: Shows full ref names with prefixes.  
+#	- `auto`: Shows `short` if output is a terminal; otherwise, hides refs.   
+#	- `no`: Hides all ref names.
+#	- `--decorate` = `--decorate=short`.
+#   Defaults to `log.decorate` config or `auto` if unset.
+
+--oneline # Short one line commit
+
+--parent # Logs parent commit hash after the commit hash
 ```
 
 ### Hashes
@@ -150,19 +167,25 @@ git cat-file -p <hash>
 Lets see what `git cat-file -p` prints
 
 ```bash
-➜  proxy-server git:(main) ✗ git cat-file -p 5c992c5                                        
-tree 2d84a61be439fc2aefc22fb3d3b6c1cdabb578fe
-parent c2947467f2254baaadedfb1dd80957f135a7de46
-author sarthak-who-codes <sarthak.roy@gmail.co> 1742752763 +0530
-committer sarthak-who-codes <sarthak.roy@gmail.com> 1742752763 +0530
+nl-to-sql git:(main) git cat-file -p 1511f4542cf966f4186ed3a520e6819ba423a4c9
+tree 90a2a6ed45d159b248cde451c27b8006ffc199cd
+parent fcbf54356ff0ff3db675fb7228f5ddd8f481392f
+author sarthak-who-codes <sarthak@gmail.com> 1744121125 +0530
+committer sarthak-who-codes <sarthak@gmail.com> 1744121125 +0530
 
-refactored file structure, implemented storing logs in user provided file location
+update readme
+➜  nl-to-sql git:(main) git cat-file -p 90a2a6ed45d159b248cde451c27b8006ffc199cd
+100644 blob 89d4b82b24bd76c46d9d531e9d7393f6aa99d806    .gitignore
+100644 blob 4d446886dd1fdc826e26bd54c40b4b45b3b556e3    README.md
+040000 tree bda6006361419dae88a1abb0baf21ee5b7356d69    backend
+040000 tree 99e428f684be6a0779dbfebcaa95888832b4c0d6    client
+➜  nl-to-sql git:(main)
 ```
 
 ---
 ## Storing data
 
-Git stores an entire _snapshot_ of files on a _per-commit_ level. This was a surprise to me! I always assumed each commit only stored the _changes_ made in that commit.
+Git stores an entire _snapshot_ of files on a _per-commit_ level.
 
 #### Optimization
 
@@ -182,6 +205,12 @@ git config --global user.name "<username>"
 git config --global user.email "your_email@example.com"
 ```
 
+We can see `user.name`:
+- `user`: Section
+- `name`: key name
+
+**Info:** Git allows you to store duplicate keys, if the key is meant to be single like`user.name`, then git will take the **last value**.
+
 The `--get` flag is useful for getting a single value.
 
 ```bash
@@ -198,4 +227,27 @@ Use `--unset` flag to remove a configuration value. For example:
 ```bash
 git config --unset <key>
 ```
+
+Purge all the instance of a key at once:
+
+```bash
+git config --unset-all user.name
+```
+
+Remove a section:
+
+```bash
+git config --remove-section <section>
+```
+
+## Locations
+
+There are several locations where Git can be configured. From more general to more specific, they are:
+
+- **system**: `/etc/gitconfig`, a file that configures Git for all users on the system
+- **global**: `~/.gitconfig`, a file that configures Git for all projects of a user
+- **local**: `.git/config`, a file that configures Git for a specific project
+- **worktree**: `.git/config.worktree`, a file that configures Git for part of a project
+
+[![Image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/e4S7M9u.png)](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/e4S7M9u.png)
 
